@@ -1,0 +1,17 @@
+# dependências: a Vercel instala de novo a partir do package-lock.json
+node_modules/
+# saída do build (a Vercel gera a dela)
+dist/
+
+# Android: arquivos gerados pelo Gradle e configurações da máquina
+android/.gradle/
+android/.idea/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+*.apk
+*.aab
+
+# editor
+.idea/
