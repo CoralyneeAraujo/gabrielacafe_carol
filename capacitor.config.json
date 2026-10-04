@@ -1,0 +1,8 @@
+{
+  "appId": "com.nossocantinho.jogo",
+  "appName": "Gabi's Restaurant",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#3B2A28"
+  }
+}

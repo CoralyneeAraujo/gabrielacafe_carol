@@ -1,0 +1,3 @@
+Assets iniciais do jogo de restaurante.
+
+Os PNGs foram recortados da concept sheet gerada. Eles ainda possuem o fundo da concept art; para uso final no jogo, recomenda-se gerar/recortar versões com fundo transparente e resolução maior.

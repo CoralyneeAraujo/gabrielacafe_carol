@@ -1,0 +1,978 @@
+<title>Nosso Cantinho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: documento de direção de arte em coluna única; telas do jogo em molduras 16:9 que escalam com container queries. Visual único (claro e quente), escolhido de propósito. */
+:root{
+  color-scheme: light;
+  --paper:#FFF4EE; --paper-2:#FFE6D8; --card:#FFFFFF;
+  --cocoa:#4A2C2A; --cocoa-2:#7A5A52; --hair-line:rgba(74,44,42,.14);
+  --straw:#F2738C; --straw-d:#D24F6C; --peach:#FFB38A;
+  --butter:#F2C230; --butter-d:#C99A1C; --night:#3B2A28;
+  --matcha:#6DB04B; --matcha-d:#4E8A33;
+  --lilac:#B7A6E8; --lilac-d:#8C78CC;
+  --wood:#D9A274; --wood-d:#A86F45; --sky:#9FD8F0;
+  --f-display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+  --f-body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--cocoa);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:24px 80px}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:600;line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.7rem,3.4vw,2.4rem)}
+h3{font-size:1.25rem;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-display);font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;color:var(--straw-d)}
+.muted{color:var(--cocoa-2)}
+section{padding-block:56px 8px;display:grid;gap:22px;scroll-margin-top:70px}
+.sec-head{display:grid;gap:8px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.panel{background:var(--card);border-radius:22px;padding:22px;border:2px solid var(--hair-line);min-width:0}
+.panel h3{margin-bottom:8px}
+ul.clean{margin:0;padding-left:1.1em;display:grid;gap:4px}
+ul.clean li::marker{color:var(--straw)}
+.note{background:var(--paper-2);border-radius:16px;padding:14px 18px;font-size:.95rem}
+.note b{color:var(--straw-d)}
+
+/* nav */
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);border-bottom:2px solid var(--hair-line);margin-inline:-20px;padding:10px 20px;overflow-x:auto;white-space:nowrap}
+nav.toc a{font-family:var(--f-display);font-weight:500;font-size:.9rem;color:var(--cocoa);text-decoration:none;padding:6px 12px;border-radius:999px;display:inline-block}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--paper-2);outline:none}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center;padding-block:28px 10px}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;letter-spacing:-.01em}
+.hero h1 span{color:var(--straw)}
+.hero .lead{font-size:1.15rem;margin-top:14px}
+.hero-chars{position:relative;aspect-ratio:1/0.82;max-width:100%;background:radial-gradient(circle at 50% 62%,#FFD9C6 0 38%,transparent 39%),radial-gradient(circle at 50% 62%,#FFE6D8 0 52%,transparent 53%);display:flex;align-items:flex-end;justify-content:center;gap:0}
+.hero-chars svg{width:42%;height:auto}
+.hero-chars .floaty{position:absolute;font-family:var(--f-display);color:var(--straw)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.tag{font-family:var(--f-display);font-size:.85rem;background:var(--card);border:2px solid var(--hair-line);border-radius:999px;padding:4px 12px}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+
+/* characters */
+.proportion{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:22px;align-items:center}
+@media (max-width:620px){.proportion{grid-template-columns:1fr}}
+.customers{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.cust{background:var(--card);border-radius:20px;border:2px solid var(--hair-line);padding:10px 10px 12px;display:grid;justify-items:center;gap:2px;text-align:center}
+.cust svg{width:100%;max-width:130px;height:auto}
+.cust b{font-family:var(--f-display);font-weight:600}
+.cust small{color:var(--cocoa-2);font-size:.8rem;line-height:1.35}
+.cust .num{font-family:var(--f-display);font-size:.75rem;color:var(--straw-d)}
+
+/* palette */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.sw{border-radius:18px;overflow:hidden;background:var(--card);border:2px solid var(--hair-line)}
+.sw .chip{height:74px}
+.sw div.t{padding:8px 12px 10px;font-size:.85rem;line-height:1.35}
+.sw b{font-family:var(--f-display);font-weight:600;font-size:1rem;display:block}
+.sw code{font-size:.78rem;color:var(--cocoa-2)}
+.type-demo{display:grid;gap:10px}
+.type-demo .d1{font-family:var(--f-display);font-weight:700;font-size:2.4rem;line-height:1}
+.type-demo .d2{font-family:var(--f-display);font-weight:600;font-size:1.4rem}
+.type-demo .d3{font-family:var(--f-body);font-weight:700}
+.type-demo .d4{font-family:var(--f-display);font-weight:600;font-size:1.6rem;font-variant-numeric:tabular-nums}
+
+/* UI kit */
+.kit{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.btn{font-family:var(--f-display);font-weight:600;font-size:1.05rem;border:0;border-radius:18px;padding:12px 22px 14px;cursor:pointer;color:#fff;background:var(--straw);box-shadow:0 5px 0 var(--straw-d),0 8px 14px rgba(210,79,108,.25);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--straw-d)}
+.btn:focus-visible{outline:3px solid var(--cocoa);outline-offset:3px}
+.btn.sec{background:var(--card);color:var(--cocoa);box-shadow:0 5px 0 #E7D3C8;border:2px solid #F0E0D6}
+.btn.gold{background:var(--butter);color:var(--cocoa);box-shadow:0 5px 0 var(--butter-d)}
+.btn.ok{background:var(--matcha);box-shadow:0 5px 0 var(--matcha-d)}
+.btn.lock{background:#EADFD8;color:#A8968E;box-shadow:0 5px 0 #D6C7BE;cursor:not-allowed}
+.btn.round{width:54px;height:54px;padding:0;border-radius:50%;display:grid;place-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--night);color:#fff;border:2px solid #2A1D1B;border-radius:999px;padding:4px 14px 4px 4px;font-family:var(--f-display);font-weight:600;font-variant-numeric:tabular-nums;box-shadow:0 3px 0 rgba(42,29,27,.35)}
+.pill .ic{width:30px;height:30px;display:grid;place-items:center}
+.pill .ic svg{width:100%;height:100%}
+.lovebar{width:150px;height:14px;border-radius:999px;background:#5A4643;overflow:hidden;border:2px solid #5A4643}
+.lovebar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--straw),#FF9DB0);border-radius:999px}
+.bubble{position:relative;background:var(--card);border:3px solid var(--cocoa);border-radius:20px;padding:10px 14px;display:inline-flex;gap:6px;align-items:center}
+.bubble::after{content:"";position:absolute;left:24px;bottom:-12px;width:18px;height:18px;background:var(--card);border-right:3px solid var(--cocoa);border-bottom:3px solid var(--cocoa);transform:rotate(45deg) skew(8deg,8deg)}
+.bubble svg{width:40px;height:40px}
+.bubble .pat{position:absolute;top:-14px;right:-10px;background:var(--card);border:2px solid var(--cocoa);border-radius:999px;font-size:.75rem;padding:0 6px;color:var(--straw)}
+.dialog{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:end;max-width:520px}
+.dialog .face{width:72px;height:72px;border-radius:50%;background:var(--paper-2);overflow:hidden;border:3px solid var(--cocoa)}
+.dialog .face svg{width:150%;margin-left:-25%;margin-top:-6%}
+.dialog .box{background:var(--card);border:3px solid var(--cocoa);border-radius:20px;padding:12px 16px 14px;position:relative}
+.dialog .name{position:absolute;top:-14px;left:16px;background:var(--straw);color:#fff;font-family:var(--f-display);font-weight:600;font-size:.85rem;padding:1px 12px;border-radius:999px}
+
+/* game screens */
+.screen{container-type:inline-size;position:relative;aspect-ratio:16/9;width:100%;border-radius:22px;overflow:hidden;border:4px solid var(--cocoa);background:var(--paper-2);font-family:var(--f-display)}
+.screen-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.abs{position:absolute}
+.wall{inset:0 0 38% 0;background-color:#FFE1D1;background-image:radial-gradient(circle at 20px 20px,rgba(242,115,140,.18) 3px,transparent 4px),radial-gradient(circle at 0 0,rgba(242,115,140,.1) 2px,transparent 3px);background-size:40px 40px}
+.wains{left:0;right:0;top:54%;height:8%;background:repeating-linear-gradient(90deg,#E8B58C 0 3.2cqw,#DDA77D 3.2cqw 3.4cqw);border-top:.4cqw solid var(--wood-d)}
+.floor{left:0;right:0;top:62%;bottom:0;background:repeating-linear-gradient(90deg,#D9A274 0 8cqw,#CF966A 8cqw 8.3cqw);}
+.win{left:5%;top:9%;width:20%;height:38%;border-radius:10cqw 10cqw 1cqw 1cqw;border:.9cqw solid var(--wood-d);background:linear-gradient(#FFB38A,#FFD6A8 60%,#FFE9C9);overflow:hidden}
+.win::after{content:"";position:absolute;left:47%;top:0;bottom:0;width:.6cqw;background:var(--wood-d)}
+.lights{left:0;right:0;top:3%;height:4%;background:radial-gradient(circle at 2cqw 50%,#FFE58A 0 .45cqw,rgba(255,229,138,.5) .5cqw,transparent 1.1cqw);background-size:4cqw 100%}
+.frame{border:.6cqw solid var(--wood-d);background:#FFF6EE;border-radius:.6cqw;display:grid;place-items:center}
+.hud{left:1.6%;right:1.6%;top:2.6%;display:flex;justify-content:space-between;align-items:flex-start;gap:1cqw;z-index:3}
+.hud .grp{display:flex;gap:1cqw;align-items:center}
+.hp{display:inline-flex;align-items:center;gap:.7cqw;background:var(--night);color:#fff;border:.3cqw solid #2A1D1B;border-radius:9cqw;padding:.3cqw 1.4cqw .3cqw .3cqw;font-weight:600;font-size:1.7cqw;font-variant-numeric:tabular-nums;box-shadow:0 .35cqw 0 rgba(42,29,27,.35);white-space:nowrap}
+.hp svg{width:2.8cqw;height:2.8cqw}
+.hp .bar{width:10cqw;height:1.2cqw;background:#5A4643;border-radius:9cqw;overflow:hidden}
+.hp .bar i{display:block;height:100%;width:62%;background:var(--straw);border-radius:9cqw}
+.hp small{font-size:1.2cqw;color:#F7C6D2;font-weight:500}
+.rbtn{width:4.4cqw;height:4.4cqw;border-radius:50%;background:var(--straw);box-shadow:0 .4cqw 0 var(--straw-d);display:grid;place-items:center;color:#fff;font-size:1.8cqw;font-weight:700}
+.counter{left:0;right:0;bottom:0;height:22%;background:#F3E3D6;border-top:1.1cqw solid var(--wood-d);display:flex;gap:1.2cqw;align-items:center;justify-content:center;padding:0 2cqw;z-index:2}
+.st{width:9.2cqw;aspect-ratio:1;background:var(--card);border-radius:2cqw;border:.35cqw solid #E8D2C4;display:grid;place-items:center;box-shadow:0 .5cqw 0 #E3CBBC;position:relative}
+.st svg{width:68%;height:68%}
+.st em{position:absolute;bottom:-1.9cqw;font-style:normal;font-size:1.15cqw;color:var(--cocoa);font-weight:500;white-space:nowrap}
+.st.busy::before{content:"";position:absolute;inset:-.35cqw;border-radius:2cqw;border:.45cqw solid var(--matcha);clip-path:polygon(0 0,70% 0,70% 100%,0 100%)}
+.tbl{width:12cqw;height:3.6cqw;background:var(--wood);border:.35cqw solid var(--wood-d);border-radius:50%}
+.ch{display:block}
+.ch svg{width:100%;height:auto;display:block}
+.ob{background:var(--card);border:.35cqw solid var(--cocoa);border-radius:1.6cqw;padding:.5cqw .7cqw;display:flex;gap:.3cqw;align-items:center}
+.ob svg{width:3.4cqw;height:3.4cqw}
+.ob .hearts{position:absolute;top:-1.8cqw;left:50%;transform:translateX(-50%);font-size:1.3cqw;color:var(--straw);background:var(--card);border-radius:9cqw;padding:0 .6cqw;border:.25cqw solid var(--cocoa);white-space:nowrap}
+.fly{font-weight:700;color:var(--straw-d);font-size:1.7cqw;background:#fff;border-radius:9cqw;padding:.1cqw 1cqw;border:.25cqw solid var(--straw)}
+
+/* order screen */
+.os-bg{inset:0;background:linear-gradient(#FFE1D1 0 30%,#F3E3D6 30%)}
+.ticket{left:3%;top:13%;width:25%;background:#FFFDF8;border-radius:1.2cqw;padding:1.4cqw 1.6cqw;box-shadow:0 .6cqw 0 #E6D3C6;transform:rotate(-2deg);font-size:1.5cqw;border-top:1.1cqw solid var(--straw)}
+.ticket h5{margin:0 0 .6cqw;font-size:1.9cqw;font-weight:600}
+.ticket ol{margin:0;padding-left:2.2cqw;display:grid;gap:.4cqw}
+.ticket li.done{color:var(--matcha-d);text-decoration:line-through}
+.ticket li.now{color:var(--straw-d);font-weight:600}
+.plate{left:34%;top:26%;width:32%}
+.bins{right:3%;top:15%;width:28%;display:grid;grid-template-columns:repeat(3,1fr);gap:1cqw}
+.bin{background:var(--card);border-radius:1.6cqw;border:.35cqw solid #E8D2C4;aspect-ratio:1;display:grid;place-items:center;box-shadow:0 .5cqw 0 #E3CBBC;position:relative}
+.bin svg{width:66%}
+.bin.hint{border-color:var(--straw);animation:pulse 1.4s ease-in-out infinite}
+.os-actions{left:0;right:0;bottom:5%;display:flex;justify-content:center;gap:2cqw}
+.sbtn{font-size:2cqw;font-weight:600;padding:1cqw 3cqw 1.3cqw;border-radius:1.8cqw;color:#fff;background:var(--straw);box-shadow:0 .6cqw 0 var(--straw-d)}
+.sbtn.sec{background:var(--card);color:var(--cocoa);box-shadow:0 .6cqw 0 #E3CBBC}
+.sbtn.ok{background:var(--matcha);box-shadow:0 .6cqw 0 var(--matcha-d)}
+
+/* upgrades */
+.up-bg{inset:0;background:var(--paper)}
+.up-prev{left:2.5%;top:12%;width:33%;bottom:5%;border-radius:2cqw;overflow:hidden;border:.35cqw solid #EAD6CA}
+.up-side{left:38%;right:2.5%;top:12%;bottom:5%;display:grid;grid-template-rows:auto 1fr;gap:1.4cqw}
+.tabs{display:flex;gap:.8cqw}
+.tab{font-size:1.5cqw;font-weight:600;padding:.6cqw 1.6cqw;border-radius:9cqw;background:#F3E3D6;color:var(--cocoa-2)}
+.tab.on{background:var(--straw);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2cqw}
+.ucard{background:var(--card);border-radius:1.8cqw;border:.3cqw solid #EAD6CA;padding:1cqw;display:grid;gap:.4cqw;align-content:start;position:relative}
+.ucard .th{background:var(--paper-2);border-radius:1.2cqw;height:7cqw;display:grid;place-items:center}
+.ucard .th svg{height:80%;width:auto}
+.ucard b{font-size:1.45cqw;font-weight:600;line-height:1.1}
+.ucard small{font-size:1.05cqw;color:var(--cocoa-2);font-family:var(--f-body);line-height:1.25}
+.ucard .pips{display:flex;gap:.4cqw}
+.ucard .pips i{width:1.6cqw;height:.7cqw;border-radius:9cqw;background:#EFDCD0}
+.ucard .pips i.on{background:var(--matcha)}
+.ucard .buy{font-size:1.3cqw;font-weight:600;border-radius:1.1cqw;padding:.45cqw .8cqw .6cqw;text-align:center;background:var(--butter);box-shadow:0 .4cqw 0 var(--butter-d);display:flex;gap:.4cqw;align-items:center;justify-content:center}
+.ucard .buy svg{width:1.8cqw;height:1.8cqw}
+.ucard .buy.love{background:#FFD3DC;box-shadow:0 .4cqw 0 #F2A3B5}
+.ucard .buy.locked{background:#EFE4DD;box-shadow:0 .4cqw 0 #DCCBC0;color:#A8968E}
+.ucard.new::after{content:"novo";position:absolute;top:-1cqw;right:-.6cqw;background:var(--straw);color:#fff;font-size:1.05cqw;padding:.1cqw .8cqw;border-radius:9cqw;transform:rotate(8deg)}
+
+/* progression */
+.pg-bg{inset:0;background:linear-gradient(160deg,#C9B8F2 0%,#F7C1CF 55%,#FFD9C0 100%)}
+.path{left:4%;right:4%;top:20%;height:44%}
+.path svg{width:100%;height:100%;overflow:visible}
+.node-l{position:absolute;transform:translateX(-50%);text-align:center;width:14cqw;font-size:1.35cqw;font-weight:600;line-height:1.15}
+.node-l small{display:block;font-family:var(--f-body);font-size:1.05cqw;font-weight:600;color:var(--cocoa-2)}
+.pg-card{left:4%;right:4%;bottom:5%;height:24%;background:var(--card);border-radius:2cqw;display:grid;grid-template-columns:auto 1fr auto;gap:2cqw;align-items:center;padding:1.4cqw 2.4cqw;box-shadow:0 .7cqw 0 rgba(74,44,42,.12)}
+.pg-card h5{margin:0;font-size:2cqw;font-weight:600}
+.pg-card p{font-family:var(--f-body);font-size:1.3cqw;max-width:none}
+.pg-card .un{display:flex;gap:1cqw}
+.pg-card .un span{background:var(--paper-2);border-radius:1.2cqw;padding:.5cqw 1cqw;font-size:1.2cqw;font-weight:500}
+
+/* customizer (interactive) */
+.custom{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);background:linear-gradient(180deg,#FFE1D1,#FFF4EE);border:4px solid var(--cocoa);border-radius:22px;overflow:hidden;min-height:440px}
+@media (max-width:720px){.custom{grid-template-columns:1fr}}
+.cz-stage{position:relative;display:grid;place-items:end center;padding:56px 16px 18px;background:radial-gradient(ellipse 60% 12% at 50% 92%,rgba(74,44,42,.12),transparent 70%)}
+.cz-stage svg{width:min(250px,80%);height:auto}
+.cz-title{position:absolute;top:14px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;font-family:var(--f-display)}
+.cz-title b{font-weight:600;font-size:1.2rem}
+.cz-panel{background:var(--card);padding:16px;display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;border-left:3px solid #F0E0D6;min-width:0}
+@media (max-width:720px){.cz-panel{border-left:0;border-top:3px solid #F0E0D6}}
+.cz-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.cz-tabs button{font-family:var(--f-display);font-weight:500;font-size:.88rem;border:2px solid #F0E0D6;background:var(--paper);color:var(--cocoa);border-radius:999px;padding:5px 12px;cursor:pointer}
+.cz-tabs button[aria-selected="true"]{background:var(--straw);border-color:var(--straw);color:#fff}
+.cz-tabs button:focus-visible,.cz-opts button:focus-visible{outline:3px solid var(--cocoa);outline-offset:2px}
+.cz-label{font-family:var(--f-display);font-weight:600;font-size:1.05rem}
+.cz-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:10px;align-content:start}
+.cz-opts button{border:3px solid #F0E0D6;background:var(--paper);border-radius:16px;padding:6px 4px 8px;cursor:pointer;display:grid;justify-items:center;gap:4px;font-family:var(--f-display);font-size:.8rem;color:var(--cocoa)}
+.cz-opts button[aria-pressed="true"]{border-color:var(--straw);background:#FFF0F3}
+.cz-opts .dot{width:38px;height:38px;border-radius:50%;border:3px solid rgba(74,44,42,.25)}
+.cz-opts svg{width:56px;height:56px}
+.cz-foot{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+
+/* storyboard */
+.story{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+.shot{background:var(--card);border-radius:20px;border:2px solid var(--hair-line);overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.shot .pic{aspect-ratio:4/3;position:relative;display:flex;align-items:flex-end;justify-content:center;gap:0;overflow:hidden}
+.shot .pic svg.c{width:44%;height:auto;margin-bottom:-6%}
+.shot .t{padding:12px 14px 14px;display:grid;gap:4px;font-size:.92rem;line-height:1.45}
+.shot .t b{font-family:var(--f-display);font-weight:600;font-size:1rem}
+.shot .k{font-family:var(--f-display);font-size:.75rem;color:var(--straw-d);letter-spacing:.06em;text-transform:uppercase}
+
+/* tables */
+.tw{overflow-x:auto;border-radius:18px;border:2px solid var(--hair-line);background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.93rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--hair-line);vertical-align:top}
+th{font-family:var(--f-display);font-weight:600;background:var(--paper-2);font-size:.9rem}
+tr:last-child td{border-bottom:0}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.lv{font-family:var(--f-display);font-weight:600;color:var(--straw-d);white-space:nowrap}
+
+.loop{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.loop span{font-family:var(--f-display);font-weight:500;background:var(--card);border:2px solid var(--hair-line);border-radius:14px;padding:6px 12px}
+.loop span.hl{background:var(--straw);color:#fff;border-color:var(--straw)}
+.loop i{font-style:normal;color:var(--straw)}
+
+.check{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.check li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+.check li::before{content:"";width:18px;height:18px;margin-top:4px;border-radius:6px;border:2.5px solid var(--straw)}
+
+@keyframes pulse{50%{transform:scale(1.05)}}
+@keyframes bob{50%{transform:translateY(-6%)}}
+.bob{animation:bob 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Seções">
+  <a href="#personagens">Personagens</a><a href="#clientes">Clientes</a><a href="#paleta">Paleta e tipos</a><a href="#cenario">Cenário</a><a href="#ui">Interface</a><a href="#customizacao">Customização</a><a href="#telas">Telas</a><a href="#cena">Cena especial</a><a href="#animacoes">Animações</a><a href="#gdd">Game Design</a><a href="#proximos">Próximos passos</a>
+</nav>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Conceito visual · v0.1 · título provisório</div>
+    <h1>Nosso <span>Cantinho</span></h1>
+    <p class="lead">Um jogo cozy de restaurante feito para uma pessoa só. Ela comanda a cozinha, e cada cliente que entra pela porta é uma versão de você. <span class="muted">"Aqui tem amor e comida boa ♥"</span></p>
+    <div class="tags"><span class="tag">2D vetorial</span><span class="tag">chibi leve</span><span class="tag">cores quentes</span><span class="tag">sem game over</span><span class="tag">celular e PC</span></div>
+  </div>
+  <div class="hero-chars" id="heroChars" aria-label="A protagonista segurando uma bandeja ao lado da cliente apaixonada"></div>
+</header>
+
+<section id="personagens">
+  <div class="sec-head">
+    <div class="eyebrow">Direção de arte · 1</div>
+    <h2>Estilo dos personagens</h2>
+    <p class="muted">Formas arredondadas, contorno cor de chocolate (nunca preto) e olhos grandes com brilho. Os personagens são montados em camadas vetoriais, e é isso que torna a customização possível: cabelo, olhos, roupa e expressão são peças trocáveis sobre a mesma base.</p>
+  </div>
+  <div class="grid g2">
+    <div class="panel proportion">
+      <div id="propFig"></div>
+      <div style="display:grid;gap:10px">
+        <h3>Proporções: 2,5 cabeças</h3>
+        <ul class="clean">
+          <li>A cabeça ocupa 40% da altura: é aí que mora a expressão.</li>
+          <li>Olhos na metade inferior do rosto, bem separados: fofo sem ficar infantil.</li>
+          <li>Corpo simples, sem cintura marcada; mãos são círculos e os pés, ovais.</li>
+          <li>Contorno de 3 px em #4A2C2A com pontas arredondadas.</li>
+          <li>Sombreamento: no máximo um tom de sombra chapado por peça, sem degradê.</li>
+          <li>Bochechas rosadas sempre visíveis; ficam mais fortes nas emoções intensas.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="display:grid;gap:14px;align-content:start">
+      <h3>Traços-assinatura</h3>
+      <p class="muted" style="font-size:.95rem">Tirados da concept sheet. Esses traços aparecem em toda variação: as roupas e as poses mudam, mas a silhueta da cabeça não.</p>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+        <div><b style="font-family:var(--f-display)">Ela · protagonista</b>
+          <ul class="clean" style="font-size:.93rem">
+            <li>Cabelo preto, liso e bem longo, repartido no meio</li>
+            <li>Argolas douradas</li>
+            <li>Olhos castanhos grandes e um sorriso de lado</li>
+            <li>Uniforme: camiseta camuflada, avental preto com coração rosa, legging e tênis pretos</li>
+          </ul></div>
+        <div><b style="font-family:var(--f-display)">Você · clientes</b>
+          <ul class="clean" style="font-size:.93rem">
+            <li>Cachos castanho-escuros volumosos, que são a sua silhueta</li>
+            <li>Óculos redondos de aro fino</li>
+            <li>Argolas douradas</li>
+            <li>Camiseta listrada cinza e branca (o "uniforme" de cliente)</li>
+          </ul></div>
+      </div>
+      <div class="note"><b>Os brincos de argola</b> aparecem nas duas. É um detalhe que liga as duas personagens e pode virar um item da cena final.</div>
+    </div>
+  </div>
+  <figure class="panel" style="margin:0;display:grid;gap:10px">
+    <img src="ref/concept-sheet.png" alt="Concept sheet com a protagonista, expressões, customização, clientes, cenário, pratos e interface" style="width:100%;border-radius:14px;display:block">
+    <figcaption class="muted" style="font-size:.9rem">Referência: a concept sheet em jogo_restaurante_assets. Ela define o estilo final: chibi pintado com contorno marrom suave, luz quente e muitas plantas. Os bonecos vetoriais desta página são diagramas do sistema de camadas, não a arte final.</figcaption>
+  </figure>
+</section>
+
+<section id="clientes">
+  <div class="sec-head">
+    <div class="eyebrow">Direção de arte · 2</div>
+    <h2>Clientes: todas são você</h2>
+    <p class="muted">Rosto, cachos, óculos e argolas são sempre os mesmos. Muda a roupa, a pose, a expressão e o comportamento no jogo. As 10 variações principais seguem a sheet, e cada uma tem uma regra própria de jogo. As 15 extras da sheet (com café, notebook, celular, envergonhada, de hoodie, de touca…) entram como clientes de "ambiente" para dar variedade.</p>
+  </div>
+  <div class="customers" id="custGrid"></div>
+</section>
+
+<section id="paleta">
+  <div class="sec-head">
+    <div class="eyebrow">Direção de arte · 3</div>
+    <h2>Paleta e tipografia</h2>
+    <p class="muted">Tirada da sheet: madeira e tijolo quentes, verde das plantas e luz de luminária, com o rosa morango para tudo que é Amor. Os botões seguem as três cores da sheet: verde para Atender, mostarda para Upgrade e rosa para Customização. O lilás fica reservado para a noite e a cena especial. Nada de preto puro nem branco frio.</p>
+  </div>
+  <div class="swatches" id="swatches"></div>
+  <div class="grid g2">
+    <div class="panel type-demo">
+      <div class="eyebrow">Display · Fredoka</div>
+      <div class="d1">Pedido Especial!</div>
+      <div class="d2">Nível 3 · Apaixonadas</div>
+      <div class="d4">1.240 ★ 3</div>
+      <p class="muted" style="font-size:.9rem">Arredondada e amigável, com pesos de 400 a 700. Usada em títulos, botões, números do HUD e balões.</p>
+    </div>
+    <div class="panel type-demo">
+      <div class="eyebrow">Texto · Nunito</div>
+      <div class="d3">"Hmm… esse bolo tem gosto de primeiro encontro."</div>
+      <p>Usada em diálogos, descrições de upgrades e cartas. Corpo mínimo de 16 px no celular e entrelinha de 1,5. No HUD, os números usam algarismos tabulares para não "pular" enquanto contam.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cenario">
+  <div class="sec-head">
+    <div class="eyebrow">Direção de arte · 4</div>
+    <h2>Cenário e tela do restaurante</h2>
+    <p class="muted">A arte final segue a sheet: vista 3/4 de cima, com tijolinho, madeira quente, lousa com o menu, luminárias pendentes, janelas ao entardecer e plantas por toda parte. A câmera é fixa e tudo cabe numa tela só, como em Cooking Fever. O mockup abaixo é um esquema de layout com a posição do HUD, das mesas, dos balões e do balcão de estações na parte de baixo, perto do dedo.</p>
+  </div>
+  <div class="screen" id="scrRestaurant" role="img" aria-label="Mockup da tela do restaurante"></div>
+  <div class="grid g3">
+    <div class="panel"><h3>Fase 1 · Primeiro encontro</h3><p class="muted">Um restaurante pequeno com 2 mesas, chapa, fritadeira e cafeteira. Parede lisa e uma planta. É aconchegante, mas tem bastante espaço vazio para preencher.</p></div>
+    <div class="panel"><h3>Fase 3 · Apaixonadas</h3><p class="muted">Agora com 4 mesas e varal de luzinhas. Quadros com ilustrações de momentos de vocês e papel de parede de corações. A luz fica mais quente.</p></div>
+    <div class="panel"><h3>Fase 5 · Nosso cantinho</h3><p class="muted">Abre uma varanda com plantas e a placa do restaurante ganha os nomes de vocês. Entra o modo noite com velas, e a jukebox toca as músicas do casal.</p></div>
+  </div>
+</section>
+
+<section id="ui">
+  <div class="sec-head">
+    <div class="eyebrow">UI/UX · 1</div>
+    <h2>Interface, botões e HUD</h2>
+    <p class="muted">Os componentes parecem "fofinhos de apertar": cantos bem arredondados e uma sombra sólida embaixo, que some quando o botão é pressionado. Toda área de toque tem pelo menos 48 px. O HUD fica nos cantos superiores para não cobrir o salão.</p>
+  </div>
+  <div class="grid g2">
+    <div class="panel" style="display:grid;gap:16px">
+      <h3>Botões</h3>
+      <div class="kit">
+        <button class="btn ok">Atender</button>
+        <button class="btn gold">Upgrade</button>
+        <button class="btn">Customização</button>
+        <button class="btn sec">Cancelar</button>
+        <button class="btn gold" id="bGold">450</button>
+        <button class="btn lock" aria-disabled="true">Nível 4</button>
+        <button class="btn round" aria-label="Pausar">II</button>
+      </div>
+      <p class="muted" style="font-size:.9rem">As cores vêm da sheet: verde para servir, abrir ou confirmar; mostarda para gastar moedas; rosa para customização e Amor. Branco é a ação secundária e o cinza-rosado marca o que ainda está bloqueado.</p>
+    </div>
+    <div class="panel" style="display:grid;gap:16px">
+      <h3>HUD</h3>
+      <div class="kit" id="hudKit"></div>
+      <p class="muted" style="font-size:.9rem">Da esquerda para a direita: moedas, estrelas do dia, barra de Amor com o nível do relacionamento e, no canto oposto, relógio do dia e pausa.</p>
+    </div>
+    <div class="panel" style="display:grid;gap:22px">
+      <h3>Balão de pedido</h3>
+      <div class="kit" id="bubbleKit" style="gap:30px;padding-top:10px"></div>
+      <p class="muted" style="font-size:.9rem">O balão mostra ícones, nunca texto. Os corações acima indicam a paciência, que vai esvaziando devagar. Um balão dourado marca o Pedido Especial.</p>
+    </div>
+    <div class="panel" style="display:grid;gap:18px">
+      <h3>Caixa de diálogo</h3>
+      <div class="dialog" id="dialogKit"></div>
+      <p class="muted" style="font-size:.9rem">O retrato com a expressão do momento fica à esquerda. O texto aparece letra por letra e um toque pula para o fim. Usada nas cenas e nos clientes que conversam.</p>
+    </div>
+  </div>
+</section>
+
+<section id="customizacao">
+  <div class="sec-head">
+    <div class="eyebrow">UI/UX · 2 · protótipo interativo</div>
+    <h2>Tela de customização</h2>
+    <p class="muted">Esta tela já funciona: clique nas categorias e nas opções. É o mesmo sistema de camadas que o jogo vai usar, e as opções definitivas vão ser desenhadas a partir da foto dela.</p>
+  </div>
+  <div class="custom">
+    <div class="cz-stage">
+      <div class="cz-title"><b id="czName">Ela</b><span class="pill"><span class="ic" id="czLove"></span>Visual 1</span></div>
+      <div id="czChar" class="bob"></div>
+    </div>
+    <div class="cz-panel">
+      <div class="cz-tabs" id="czTabs" role="tablist" aria-label="Categorias"></div>
+      <div class="cz-label" id="czLabel"></div>
+      <div class="cz-opts" id="czOpts"></div>
+      <div class="cz-foot"><button class="btn sec" id="czRandom">Surpreenda</button><button class="btn">Pronto!</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="telas">
+  <div class="sec-head">
+    <div class="eyebrow">UI/UX · 3</div>
+    <h2>Pedidos, upgrades e progressão</h2>
+  </div>
+  <div class="screen-cap"><h3>Tela de montagem do pedido</h3><span class="muted">Aparece ao tocar na bancada. A dica pisca no próximo ingrediente.</span></div>
+  <div class="screen" id="scrOrder" role="img" aria-label="Mockup da montagem do pedido"></div>
+  <div class="screen-cap" style="margin-top:18px"><h3>Tela de upgrades</h3><span class="muted">À esquerda, uma prévia ao vivo do restaurante; à direita, os cartões por categoria.</span></div>
+  <div class="screen" id="scrUpgrades" role="img" aria-label="Mockup da loja de upgrades"></div>
+  <div class="screen-cap" style="margin-top:18px"><h3>Tela de progressão: "Nossa história"</h3><span class="muted">Um caminho com os 6 níveis do relacionamento.</span></div>
+  <div class="screen" id="scrProgress" role="img" aria-label="Mockup da tela de progressão"></div>
+  <div class="grid g3" style="margin-top:6px">
+    <div class="panel"><h3>Menu principal</h3><p class="muted">A fachada do restaurante ao entardecer, com a protagonista acenando na porta. Três botões: <b>Abrir o restaurante</b>, <b>Nossa história</b> e <b>Visual</b>. A engrenagem de ajustes fica no canto.</p></div>
+    <div class="panel"><h3>Mapa de navegação</h3><p class="muted">Menu → Dia de trabalho → Resumo do dia → Loja de upgrades → próximo dia. Os ícones fixos no rodapé do resumo levam para Nossa história e Visual.</p></div>
+    <div class="panel"><h3>Resumo do dia</h3><p class="muted">Estrelas aparecem uma a uma, moedas contando e o Amor enchendo a barra. Se subir de nível, entra um banner com confete e a carta da memória desbloqueada.</p></div>
+  </div>
+</section>
+
+<section id="cena">
+  <div class="sec-head">
+    <div class="eyebrow">Narrativa · Cliente especial</div>
+    <h2>A cena surpresa</h2>
+    <p class="muted">Depois de chegar ao Nível 5, no fim de um dia, a última cliente entra com um balão dourado. Os textos entre colchetes são para você preencher com a história real de vocês.</p>
+  </div>
+  <div class="story" id="story"></div>
+</section>
+
+<section id="animacoes">
+  <div class="sec-head">
+    <div class="eyebrow">Direção de arte · 5</div>
+    <h2>Animações necessárias</h2>
+    <p class="muted">Quase tudo é feito com interpolação por código (mover, escalar, girar camadas), sem desenhar quadro a quadro. Isso deixa o jogo leve e permite que a customização funcione em todas as animações.</p>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>Grupo</th><th>Animação</th><th>Como funciona</th><th>Duração</th></tr></thead>
+    <tbody id="animRows"></tbody>
+  </table></div>
+</section>
+
+<section id="gdd">
+  <div class="sec-head">
+    <div class="eyebrow">Documento de Game Design · resumido</div>
+    <h2>Como o jogo funciona</h2>
+  </div>
+
+  <div class="grid g3">
+    <div class="panel"><h3>Pitch</h3><p>Um jogo de gerenciamento de restaurante, cozy e sem estresse, em que ela atende versões cartoon de você. Cada cliente bem servido gera Amor, e o Amor conta a história de vocês até um pedido especial final.</p></div>
+    <div class="panel"><h3>Plataforma</h3><p>Jogo web (HTML5) que abre por um link no celular ou no PC e pode ser "instalado" na tela inicial. Não precisa de loja de apps e o progresso fica salvo no aparelho.</p></div>
+    <div class="panel"><h3>Duração</h3><p>Cerca de 30 dias de jogo de 2 a 3 minutos cada, o que dá 2 a 3 horas até o final. Depois disso o modo livre continua aberto.</p></div>
+  </div>
+
+  <div class="panel" style="display:grid;gap:12px">
+    <h3>Pilares</h3>
+    <div class="grid g3">
+      <div><b style="font-family:var(--f-display)">Aconchego antes do desafio.</b> <span class="muted">O jogo não tem game over. Errar só custa um pouco de gorjeta.</span></div>
+      <div><b style="font-family:var(--f-display)">Tudo é sobre vocês.</b> <span class="muted">Quadros, receitas, músicas e falas vêm da história real do casal.</span></div>
+      <div><b style="font-family:var(--f-display)">Progresso que dá para ver.</b> <span class="muted">Toda compra muda o restaurante na hora e todo nível desbloqueia algo bonito.</span></div>
+    </div>
+  </div>
+
+  <div class="panel" style="display:grid;gap:12px">
+    <h3>Loop principal</h3>
+    <div class="loop"><span>Cliente entra</span><i>→</i><span>Faz o pedido</span><i>→</i><span>Preparo nas estações</span><i>→</i><span>Monta o prato</span><i>→</i><span>Entrega</span><i>→</i><span>Reação</span><i>→</i><span class="hl">Moedas + Estrelas + Amor</span><i>→</i><span>Melhora o restaurante</span></div>
+    <p class="muted">Controle só por toque, como em Diner Dash: ela toca na estação para começar o preparo, toca no item pronto para ele ir à bancada, monta o prato e toca no cliente para entregar. As ações entram numa fila, então dá para tocar várias seguidas e a personagem anda sozinha.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel"><h3>Tempo e dificuldade</h3>
+      <ul class="clean">
+        <li>Cada dia dura 3 minutos de relógio, com 6 a 14 clientes.</li>
+        <li>A paciência tem 4 corações, que duram de 60 a 90 s no total. Abaixo de 1 coração, a cliente vira a variação "impaciente".</li>
+        <li>Se a paciência acabar, a cliente vai embora triste e sem pagar. Não existe derrota.</li>
+        <li>A meta do dia vale 1 a 3 estrelas, por moedas ganhas.</li>
+        <li><b>Modo sem pressa</b> nos ajustes: paciência infinita para jogar só pela história.</li>
+      </ul>
+    </div>
+    <div class="panel"><h3>Personalidades das clientes</h3>
+      <ul class="clean">
+        <li><b>Faminta:</b> pede 2 pratos e paga o dobro.</li>
+        <li><b>Impaciente:</b> a paciência cai 1,5× mais rápido, mas a gorjeta é maior.</li>
+        <li><b>Sonolenta:</b> chega devagar e só pede café.</li>
+        <li><b>Apaixonada:</b> dá o dobro de Amor.</li>
+        <li><b>Brava:</b> aparece se o pedido vem errado. Um docinho de cortesia acalma.</li>
+        <li><b>Comemorando:</b> traz um bônus de combo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th>Recurso</th><th>Como ganha</th><th>Para que serve</th></tr></thead>
+    <tbody>
+      <tr><td class="lv">Moedas</td><td>Preço do prato + gorjeta pela rapidez (0 a 50%)</td><td>Equipamentos, mesas, decoração comum, receitas</td></tr>
+      <tr><td class="lv">Estrelas</td><td>1 a 3 por dia, conforme a meta</td><td>Abrem o próximo bloco de dias; 3 estrelas dão um quadro bônus</td></tr>
+      <tr><td class="lv">Amor</td><td>+1 por pedido certo, +2 se perfeito (rápido e sem erro), ×2 da cliente apaixonada, +5 com combo de 5</td><td>Sobe o nível do relacionamento e compra a decoração romântica</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tw"><table>
+    <thead><tr><th>Nível</th><th>Amor total</th><th>Desbloqueio visual</th><th>Desbloqueio narrativo</th></tr></thead>
+    <tbody>
+      <tr><td class="lv">1 · Primeiro encontro</td><td class="n">0</td><td>Restaurante pequeno, 2 mesas; hambúrguer, batata e café</td><td>Tutorial; a primeira cliente diz a frase do primeiro encontro de vocês</td></tr>
+      <tr><td class="lv">2 · Se conhecendo</td><td class="n">60</td><td>Panquecas e sobremesa, o 1º quadro e a lousa do menu com coração</td><td>Memória 1: carta curta sobre o começo</td></tr>
+      <tr><td class="lv">3 · Apaixonadas</td><td class="n">180</td><td>Pizza e lasanha, varal de luzinhas, roupa casual (vestido camuflado) e avental rosa</td><td>Memória 2; clientes começam a deixar bilhetinhos</td></tr>
+      <tr><td class="lv">4 · Namoradas</td><td class="n">400</td><td>Mesa para dois, aventais combinando, milkshake e o prato favorito dela</td><td>Mini-cena: as duas dividem um milkshake</td></tr>
+      <tr><td class="lv">5 · Nosso cantinho</td><td class="n">750</td><td>Varanda, placa com os nomes, modo noite e jukebox</td><td>Memória 3; aparece o gancho do Pedido Especial</td></tr>
+      <tr><td class="lv">6 · Para sempre</td><td class="n">Pedido Especial</td><td>Restaurante completo com tema "para sempre" e roupas finais</td><td>A cena surpresa, a carta final e o modo livre</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="grid g2">
+    <div class="panel"><h3>Cardápio e estações (da sheet)</h3>
+      <ul class="clean">
+        <li><b>Nível 1:</b> hambúrguer (chapa + montagem: pão, carne, queijo, alface, tomate), batata frita (fritadeira) e café.</li>
+        <li><b>Nível 2:</b> suco, panquecas e sobremesa (bolo de morango).</li>
+        <li><b>Nível 3:</b> pizza e lasanha (forno). Se ficarem tempo demais, queimam de leve, e isso só muda a cor.</li>
+        <li><b>Nível 4:</b> salada, milkshake e o prato favorito dela.</li>
+        <li><b>Nível 5:</b> sushi (bancada fria) e refrigerante.</li>
+        <li><b>Bancada de montagem:</b> os ingredientes entram na ordem do pedido, como em Good Pizza.</li>
+      </ul>
+    </div>
+    <div class="panel"><h3>Upgrades</h3>
+      <ul class="clean">
+        <li><b>Cozinha:</b> cada estação tem 3 níveis, que trazem preparo mais rápido e +1 espaço.</li>
+        <li><b>Salão:</b> as mesas vão de 2 a 6 e a bandeja passa a levar 2 pratos.</li>
+        <li><b>Decoração:</b> plantas, quadros, luminárias e papel de parede. Aumenta a paciência das clientes.</li>
+        <li><b>Romance:</b> comprado com Amor. Luzinhas, flores, velas e a jukebox.</li>
+        <li>Toda compra aparece no restaurante na hora, com um "plim" e partículas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel"><h3>Personalização secreta</h3>
+      <p class="muted" style="margin-bottom:8px">Os conteúdos reais ficam num único arquivo de texto, fácil de editar sem mexer no código:</p>
+      <ul class="clean">
+        <li>Os nomes de vocês e a data de começo do namoro</li>
+        <li>O pedido do primeiro encontro, que vira o Pedido Especial</li>
+        <li>3 memórias (título e um parágrafo) para o álbum</li>
+        <li>Frases que as clientes falam ao serem servidas</li>
+        <li>Os momentos que viram quadros ilustrados na parede</li>
+        <li>A carta final</li>
+      </ul>
+    </div>
+    <div class="panel"><h3>Tecnologia proposta</h3>
+      <ul class="clean">
+        <li>TypeScript + Phaser 3 + Vite, com publicação num link estático.</li>
+        <li>Arte em PNG no estilo da sheet. A protagonista é montada em camadas (boneca de papel), seguindo o mesmo esquema de camadas dos diagramas desta página.</li>
+        <li>Enquanto a arte final não fica pronta, o protótipo usa os recortes atuais e os bonecos vetoriais como placeholder.</li>
+        <li>Progresso salvo no próprio aparelho.</li>
+        <li>Pensado primeiro para celular na horizontal, e funciona no PC.</li>
+        <li><b>MVP:</b> 1 tela de restaurante, 3 receitas (hambúrguer, batata, café), 10 dias, níveis 1–3 de Amor e a customização básica. Depois disso vêm o conteúdo e a cena final.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="proximos">
+  <div class="sec-head">
+    <div class="eyebrow">Antes de programar</div>
+    <h2>Próximos passos</h2>
+  </div>
+  <div class="grid g3">
+    <div class="panel"><h3>1. Pipeline de arte</h3><p class="muted">A sheet é arte pintada (raster), e os recortes são pequenos e têm fundo. Para o jogo, a proposta é híbrida: cenário, comida e clientes em PNG transparente em alta resolução, no estilo da sheet; a protagonista em "boneca de papel", com camadas PNG alinhadas (cabelo de trás e da frente, rosto, roupa, avental, acessório) para a customização funcionar.</p></div>
+    <div class="panel"><h3>2. A história de vocês</h3><p class="muted">Os nomes, a data, o pedido do primeiro encontro, 3 memórias e a ideia da surpresa final. Pode ser em tópicos mesmo.</p></div>
+    <div class="panel"><h3>3. Aprovação</h3><p class="muted">Ajustes na paleta, no estilo ou no ritmo. Com tudo aprovado, começo pelo MVP.</p></div>
+  </div>
+</section>
+</div>
+
+<script>
+const L='#4A2C2A', MOUTH='#C94F5C', BLUSH='#FF8FA3', STRAW='#F2738C', BUTTER='#FFD66B', MATCHA='#8CC59A';
+
+function heart(x,y,s,fill,stroke,sw){
+  return `<path d="M${x} ${y+6*s}C${x-10*s} ${y-1*s} ${x-6*s} ${y-10*s} ${x} ${y-4*s}C${x+6*s} ${y-10*s} ${x+10*s} ${y-1*s} ${x} ${y+6*s}Z" fill="${fill}"${stroke?` stroke="${stroke}" stroke-width="${sw||2}" stroke-linejoin="round"`:''}/>`;
+}
+const S=(c,w)=>`stroke="${c||L}" stroke-width="${w||3}" stroke-linejoin="round" stroke-linecap="round"`;
+
+function backHair(p){
+  const f=`fill="${p.hairColor}" ${S()}`;
+  const cap=`<path d="M52 74Q46 18 100 20Q154 18 148 74Z" ${f}/>`;
+  switch(p.hairStyle){
+    case 'longo': return `<path d="M52 70Q46 18 100 20Q154 18 148 70L156 182Q128 194 100 188Q72 194 44 182Z" ${f}/>`;
+    case 'chanel': return `<path d="M52 70Q46 18 100 20Q154 18 148 70L152 126Q100 138 48 126Z" ${f}/>`;
+    case 'ondulado': return `<path d="M52 70Q46 18 100 20Q154 18 148 70Q160 100 150 120Q162 145 152 170Q130 192 100 186Q70 192 48 170Q38 145 50 120Q40 100 52 70Z" ${f}/>`;
+    case 'rabo': return `<path d="M138 34Q198 50 178 152Q170 112 146 86Z" ${f}/>${cap}`;
+    case 'coque': return `<circle cx="100" cy="20" r="21" ${f}/>${cap}`;
+    case 'cacheado': {
+      // volume grande de cachos: anel de círculos em volta da cabeça descendo até os ombros
+      let s='';
+      const pts=[[40,150],[160,150],[52,168],[148,168],[36,124],[164,124]];
+      for(let a=150;a<=390;a+=16){const r=a*Math.PI/180;pts.push([100+60*Math.cos(r),76-58*Math.abs(Math.sin(r))*(Math.sin(r)<0?1:-0.6)]);}
+      pts.forEach(([x,y])=>s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="19" ${f}/>`);
+      return s+`<path d="M44 150Q30 40 100 18Q170 40 156 150Z" fill="${p.hairColor}"/>`;
+    }
+  }
+  return cap;
+}
+function frontHair(p){
+  const f=`fill="${p.hairColor}" ${S()}`;
+  switch(p.bangs){
+    case 'lateral': return `<path d="M53 82Q48 24 100 24Q152 24 147 82Q142 56 122 46Q96 58 70 60Q60 66 53 82Z" ${f}/>`;
+    case 'cortina': return `<path d="M53 86Q48 24 100 24Q152 24 147 86Q140 54 104 46L100 58L96 46Q60 54 53 86Z" ${f}/>`;
+    case 'sem': return `<path d="M54 70Q50 24 100 24Q150 24 146 70Q130 40 100 40Q70 40 54 70Z" ${f}/>`;
+  }
+  return `<path d="M53 80Q49 24 100 24Q151 24 147 80Q141 60 130 56Q124 66 113 58Q105 68 95 58Q85 67 76 58Q63 62 53 80Z" ${f}/>`;
+}
+function openEye(x,y,p,rx,ry){
+  let s=`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${p.eyeColor}" ${S(L,2)}/><circle cx="${x+2.2}" cy="${y-3}" r="2.6" fill="#fff"/><circle cx="${x-2}" cy="${y+3}" r="1.2" fill="#fff"/>`;
+  if(p.eyeShape==='cilios'){const o=x<100?-1:1;s+=`<path d="M${x+o*6} ${y-5}L${x+o*11} ${y-9}M${x+o*7} ${y-1}L${x+o*12} ${y-3}" fill="none" ${S(L,2.5)}/>`;}
+  return s;
+}
+function face(p){
+  const e=p.expression, xs=[82,118], y=84; let s='';
+  const arcUp=x=>`<path d="M${x-7} ${y+2}Q${x} ${y-8} ${x+7} ${y+2}" fill="none" ${S()}/>`;
+  const arcDn=x=>`<path d="M${x-7} ${y-1}Q${x} ${y+5} ${x+7} ${y-1}" fill="none" ${S()}/>`;
+  const ry=p.eyeShape==='amendoado'?6:8.5;
+  // eyes
+  if(['feliz','comemorando','coracao'].includes(e)) xs.forEach(x=>s+=arcUp(x));
+  else if(e==='apaixonada') xs.forEach(x=>s+=heart(x,y,1.15,'#E8476A',L,1.5));
+  else if(e==='sonolenta') xs.forEach(x=>s+=arcDn(x));
+  else if(e==='joinha') s+=openEye(82,y,p,6.5,ry)+arcUp(118);
+  else if(e==='surpresa') xs.forEach(x=>s+=openEye(x,y,p,8,10.5));
+  else if(e==='impaciente') xs.forEach(x=>s+=openEye(x,y+1,p,6.5,5.5)+`<path d="M${x-8} ${y-4}L${x+8} ${y-4}" ${S()}/>`);
+  else xs.forEach(x=>s+=openEye(x,y,p,6.5,ry));
+  // brows
+  const bw=p.brows==='grossas'?4.5:2.6, bc=p.browColor||L;
+  if(['brava','impaciente'].includes(e)) s+=`<path d="M73 64L90 71M127 64L110 71" fill="none" ${S(bc,bw)}/>`;
+  else if(e==='triste') s+=`<path d="M75 66Q82 66 89 61M111 61Q118 66 125 66" fill="none" ${S(bc,bw)}/>`;
+  else { const dy=e==='surpresa'?-6:(e==='sonolenta'?3:0);
+    s+=`<path d="M75 ${70+dy}Q82 ${65+dy} 89 ${68+dy}M111 ${68+dy}Q118 ${65+dy} 125 ${70+dy}" fill="none" ${S(bc,bw)}/>`; }
+  // blush
+  const bo=['apaixonada','coracao','surpresa'].includes(e)?.85:.55;
+  s+=`<ellipse cx="72" cy="96" rx="8" ry="4.5" fill="${BLUSH}" opacity="${bo}"/><ellipse cx="128" cy="96" rx="8" ry="4.5" fill="${BLUSH}" opacity="${bo}"/>`;
+  // mouth
+  switch(e){
+    case 'feliz': case 'comemorando': case 'coracao': s+=`<path d="M90 98Q100 113 110 98Z" fill="${MOUTH}" ${S(L,2.5)}/>`;break;
+    case 'joinha': s+=`<path d="M92 99Q100 109 108 99Z" fill="${MOUTH}" ${S(L,2.5)}/>`;break;
+    case 'apaixonada': s+=`<path d="M92 100Q100 107 108 100" fill="none" ${S()}/>`;break;
+    case 'faminta': s+=`<ellipse cx="100" cy="103" rx="6.5" ry="7.5" fill="${MOUTH}" ${S(L,2.5)}/><path d="M107 104q4 7 0 10q-4-3 0-10Z" fill="#9FD8F0" ${S(L,1.5)}/>`;break;
+    case 'impaciente': s+=`<path d="M93 103L107 103" ${S()}/>`;break;
+    case 'surpresa': s+=`<ellipse cx="100" cy="104" rx="5" ry="6" fill="${MOUTH}" ${S(L,2.5)}/>`;break;
+    case 'brava': s+=`<path d="M92 106Q100 98 108 106" fill="none" ${S()}/>`;break;
+    case 'sonolenta': s+=`<ellipse cx="100" cy="103" rx="3.5" ry="3" fill="${MOUTH}" ${S(L,2)}/>`;break;
+    case 'triste': s+=`<path d="M93 105Q100 100 107 105" fill="none" ${S()}/><path d="M76 92q-3 6 0 9q3-3 0-9Z" fill="#9FD8F0" ${S(L,1.5)}/>`;break;
+    default: s+=`<path d="M93 100Q100 106 107 100" fill="none" ${S()}/>`;
+  }
+  return s;
+}
+function glasses(p){
+  const g=`fill="rgba(255,255,255,.28)" ${S(p.glassesColor||L,2.6)}`;
+  switch(p.glasses){
+    case 'redondos': return `<circle cx="82" cy="84" r="12.5" ${g}/><circle cx="118" cy="84" r="12.5" ${g}/><path d="M94.5 83Q100 79 105.5 83" fill="none" ${S(p.glassesColor||L,2.6)}/>`;
+    case 'quadrados': return `<rect x="68" y="74" width="28" height="20" rx="5" ${g}/><rect x="104" y="74" width="28" height="20" rx="5" ${g}/><path d="M96 82L104 82" ${S(p.glassesColor||L,2.6)}/>`;
+    case 'gatinho': return `<path d="M68 76Q82 72 96 78L94 90Q82 96 72 90Q66 84 64 72Z" ${g}/><path d="M132 76Q118 72 104 78L106 90Q118 96 128 90Q134 84 136 72Z" ${g}/><path d="M96 82L104 82" ${S(p.glassesColor||L,2.6)}/>`;
+  }
+  return '';
+}
+function accessory(p){
+  switch(p.accessory){
+    case 'presilha': return heart(134,44,1.1,STRAW,L,2);
+    case 'laco': return `<path d="M136 36L120 27L121 45ZM136 36L152 27L151 45Z" fill="${STRAW}" ${S(L,2.2)}/><circle cx="136" cy="36" r="4.5" fill="${STRAW}" ${S(L,2.2)}/>`;
+    case 'flor': { let s=''; for(let i=0;i<5;i++){const a=i*72*Math.PI/180;s+=`<circle cx="${(64+7*Math.cos(a)).toFixed(1)}" cy="${(42+7*Math.sin(a)).toFixed(1)}" r="5.5" fill="#fff" ${S(L,2)}/>`;} return s+`<circle cx="64" cy="42" r="4" fill="${BUTTER}" ${S(L,2)}/>`; }
+    case 'tiara': return `<path d="M55 58Q100 12 145 58" fill="none" ${S(L,8)}/><path d="M55 58Q100 12 145 58" fill="none" stroke="${STRAW}" stroke-width="5" stroke-linecap="round"/>`;
+  }
+  return '';
+}
+const ARMS={
+  parada:[['M72 132Q60 165 66 192',66,194],['M128 132Q140 165 134 192',134,194]],
+  bandeja:[['M72 132Q60 165 66 192',66,194],['M128 132Q140 160 154 148',154,147]],
+  cintura:[['M72 132Q52 158 70 176',71,177],['M128 132Q148 158 130 176',129,177]],
+  comemorando:[['M72 132Q52 112 58 88',58,84],['M128 132Q148 112 142 88',142,84]],
+  joinha:[['M72 132Q60 165 66 192',66,194],['M128 132Q154 128 148 104',148,100]],
+  coracao:[['M72 132Q58 160 90 158',91,156],['M128 132Q142 160 110 158',109,156]],
+  barriga:[['M72 132Q60 168 92 172',92,172],['M128 132Q140 168 108 172',108,172]],
+  bochechas:[['M72 132Q48 128 62 104',62,102],['M128 132Q152 128 138 104',138,102]],
+  cruzados:[['M72 132Q72 164 122 156',122,156],['M128 132Q128 164 78 156',78,156]]
+};
+function chibiInner(p){
+  const dress=p.outfitType==='vestido';
+  let s=backHair(p);
+  s+=`<rect x="92" y="106" width="16" height="22" rx="6" fill="${p.skin}" ${S(L,2.5)}/>`;
+  const legC=dress?p.skin:(p.pants||'#6B7FB8');
+  s+=`<rect x="84" y="196" width="13" height="56" rx="6" fill="${legC}" ${S(L,2.5)}/><rect x="103" y="196" width="13" height="56" rx="6" fill="${legC}" ${S(L,2.5)}/>`;
+  s+=`<ellipse cx="88" cy="254" rx="12.5" ry="7" fill="${p.shoes}" ${S(L,2.5)}/><ellipse cx="112" cy="254" rx="12.5" ry="7" fill="${p.shoes}" ${S(L,2.5)}/>`;
+  s+= dress ? `<path d="M72 124Q100 116 128 124L134 170L146 214Q100 224 54 214L66 170Z" fill="${p.outfit}" ${S()}/>`
+            : `<path d="M72 124Q100 116 128 124L135 202Q100 210 65 202Z" fill="${p.outfit}" ${S()}/>`;
+  if(p.pattern==='camuflada') s+=`<g opacity=".9"><ellipse cx="80" cy="140" rx="7" ry="4" fill="#4E5A34"/><ellipse cx="122" cy="146" rx="8" ry="5" fill="#A9A47A"/><ellipse cx="78" cy="170" rx="6" ry="5" fill="#A9A47A"/><ellipse cx="126" cy="182" rx="7" ry="4" fill="#4E5A34"/><ellipse cx="96" cy="190" rx="8" ry="4" fill="#4E5A34"/><ellipse cx="112" cy="132" rx="6" ry="3.5" fill="#4E5A34"/></g>`;
+  if(p.pattern==='listrada') s+=`<path d="M73 140H127M72 152H128M71 164H129M70 176H130M69 188H131" stroke="#8D93A3" stroke-width="4"/>`;
+  s+=`<path d="M90 121L100 131L110 121" fill="none" ${S(L,2.5)}/>`;
+  if(p.apron && p.apron!=='nenhum'){
+    const ab=dress?212:204;
+    s+=`<path d="M86 136L90 124M114 136L110 124" ${S(L,4)}/><path d="M82 138Q100 133 118 138L124 ${ab}Q100 ${ab+6} 76 ${ab}Z" fill="${p.apron}" ${S(L,2.5)}/><rect x="90" y="${ab-36}" width="20" height="15" rx="5" fill="rgba(0,0,0,.05)" ${S(L,2)}/>`+heart(100,ab-29,.6,STRAW);
+  }
+  const pose=ARMS[p.pose]||ARMS.parada;
+  pose.forEach(([d,hx,hy])=>{ s+=`<path d="${d}" fill="none" stroke="${L}" stroke-width="15" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${p.outfit}" stroke-width="9.5" stroke-linecap="round"/><circle cx="${hx}" cy="${hy}" r="7.5" fill="${p.skin}" ${S(L,2.5)}/>`; });
+  if(p.pose==='joinha') s+=`<rect x="145" y="84" width="7" height="14" rx="3.5" fill="${p.skin}" ${S(L,2.2)}/><circle cx="148" cy="100" r="8" fill="${p.skin}" ${S(L,2.5)}/>`;
+  if(p.pose==='coracao') s+=heart(100,142,1.7,'#E8476A',L,2.2);
+  if(p.pose==='bandeja') s+=`<rect x="144" y="122" width="30" height="17" rx="4" fill="#FFD9E0" ${S(L,2.2)}/><path d="M144 129H174" stroke="${STRAW}" stroke-width="3"/><circle cx="159" cy="117" r="5" fill="#E8476A" ${S(L,2)}/><ellipse cx="159" cy="141" rx="28" ry="5" fill="#F1E6DE" ${S(L,2.5)}/>`;
+  s+=`<circle cx="54" cy="86" r="8" fill="${p.skin}" ${S(L,2.5)}/><circle cx="146" cy="86" r="8" fill="${p.skin}" ${S(L,2.5)}/>`;
+  if(p.accessory==='brincos') s+=`<circle cx="54" cy="98" r="4" fill="${BUTTER}" ${S(L,2)}/><circle cx="146" cy="98" r="4" fill="${BUTTER}" ${S(L,2)}/>`;
+  s+=`<ellipse cx="100" cy="78" rx="47" ry="44" fill="${p.skin}" ${S()}/>`;
+  if(p.freckles) s+=`<g fill="#B97B5E" opacity=".55"><circle cx="70" cy="92" r="1.3"/><circle cx="75" cy="95" r="1.3"/><circle cx="68" cy="97" r="1.3"/><circle cx="130" cy="92" r="1.3"/><circle cx="125" cy="95" r="1.3"/><circle cx="132" cy="97" r="1.3"/></g>`;
+  s+=face(p)+frontHair(p)+glasses(p)+accessory(p);
+  // extras by expression
+  const e=p.expression;
+  if(e==='apaixonada'||e==='coracao') s+=heart(160,40,1,'#FF9DB0',L,1.5)+heart(40,52,.75,'#FF9DB0',L,1.5);
+  if(e==='impaciente') s+=`<path d="M146 44Q153 56 146 61Q139 56 146 44Z" fill="#9FD8F0" ${S(L,2)}/>`;
+  if(e==='brava') s+=`<path d="M138 38q5 4 0 9M152 38q-5 4 0 9M140 36q5-4 10 0M140 50q5 4 10 0" fill="none" stroke="#E8476A" stroke-width="2.8" stroke-linecap="round"/>`;
+  if(e==='sonolenta') s+=`<text x="150" y="40" font-family="Fredoka,sans-serif" font-weight="600" font-size="18" fill="${L}">Z</text><text x="166" y="24" font-family="Fredoka,sans-serif" font-weight="600" font-size="12" fill="${L}">z</text>`;
+  if(e==='faminta') s+=`<text x="152" y="42" font-family="Fredoka,sans-serif" font-weight="700" font-size="22" fill="${STRAW}">!</text>`;
+  if(e==='surpresa') s+=`<path d="M40 40l-6-6M48 34l-2-8M152 34l2-8M160 40l6-6" ${S(L,2.5)}/>`;
+  if(e==='comemorando'){ const c=[[30,40,STRAW,20],[170,30,BUTTER,-30],[40,110,MATCHA,40],[166,104,'#B7A6E8',10],[24,76,BUTTER,-15],[178,70,STRAW,60]];
+    c.forEach(([x,y,col,r])=>s+=`<rect x="${x}" y="${y}" width="8" height="4" rx="1.5" fill="${col}" transform="rotate(${r} ${x} ${y})"/>`); }
+  return s;
+}
+function chibi(p,cls){ return `<svg ${cls?`class="${cls}" `:''}viewBox="0 0 200 270" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${chibiInner(p)}</svg>`; }
+
+/* default looks (provisórios até as fotos) */
+/* aparências tiradas da concept sheet (jogo_restaurante_assets) */
+const HER={skin:'#EDB892',hairColor:'#2B1D19',hairStyle:'longo',bangs:'sem',eyeColor:'#6B4126',eyeShape:'cilios',brows:'finas',browColor:'#2B1D19',glasses:'nenhum',outfit:'#7D8456',pattern:'camuflada',outfitType:'blusa',pants:'#2E2828',apron:'#2E2626',accessory:'brincos',shoes:'#2E2828',expression:'feliz',pose:'parada'};
+const YOU={skin:'#F2C8A8',hairColor:'#3A2620',hairStyle:'cacheado',bangs:'franja',eyeColor:'#5B3A29',eyeShape:'redondo',brows:'finas',browColor:'#3A2620',glasses:'redondos',glassesColor:'#6B4E3D',outfit:'#E9E9EE',pattern:'listrada',outfitType:'blusa',pants:'#3F4A66',apron:'nenhum',accessory:'brincos',shoes:'#FFFFFF',expression:'feliz',pose:'parada'};
+const you=o=>Object.assign({},YOU,o), her=o=>Object.assign({},HER,o);
+
+/* hero */
+document.getElementById('heroChars').innerHTML = chibi(her({pose:'bandeja'}),'bob') + chibi(you({expression:'apaixonada',outfit:'#B7A6E8'})) ;
+
+/* proportions */
+document.getElementById('propFig').innerHTML = `<svg viewBox="-10 0 250 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Guia de proporções: cabeça ocupa cerca de 40% da altura">
+<g>${chibiInner(her({expression:'neutro'}))}</g>
+<g stroke="#D24F6C" stroke-width="1.5" stroke-dasharray="4 4"><line x1="-6" y1="20" x2="206" y2="20"/><line x1="-6" y1="122" x2="206" y2="122"/><line x1="-6" y1="200" x2="206" y2="200"/><line x1="-6" y1="261" x2="206" y2="261"/></g>
+<g font-family="Fredoka,sans-serif" font-size="11" fill="#D24F6C" font-weight="600"><text x="206" y="74">cabeça</text><text x="206" y="86">40%</text><text x="206" y="164">tronco</text><text x="206" y="234">pernas</text></g></svg>`;
+
+/* customers */
+const CUST=[
+ ['Normal','Paga certinho e sorri. A cliente padrão.',you({expression:'neutro'})],
+ ['Feliz','Reação a um pedido certo.',you({expression:'feliz',pose:'bochechas'})],
+ ['Com fome','Pede 2 pratos e paga o dobro.',you({expression:'faminta',pose:'barriga'})],
+ ['Impaciente','A paciência cai mais rápido, mas a gorjeta é maior.',you({expression:'impaciente',pose:'cruzados'})],
+ ['Surpresa','Reação a um prato perfeito ou a um upgrade novo.',you({expression:'surpresa'})],
+ ['Apaixonada','Dá o dobro de Amor e solta corações ao sair.',you({expression:'apaixonada',pose:'coracao'})],
+ ['Brava','Recebeu o pedido errado. Uma sobremesa de cortesia resolve.',you({expression:'brava',pose:'cruzados',outfit:'#2E2828',pattern:''})],
+ ['Sonolenta','Chega de manhã cedo e só quer café.',you({expression:'sonolenta'})],
+ ['Comemorando','Data especial: bônus de combo no dia.',you({expression:'comemorando',pose:'comemorando'})],
+ ['Fazendo joinha','Reação a uma entrega rápida.',you({expression:'joinha',pose:'joinha'})]
+];
+document.getElementById('custGrid').innerHTML = CUST.map((c,i)=>`<div class="cust"><span class="num">Cliente ${String(i+1).padStart(2,'0')}</span>${chibi(c[2])}<b>${c[0]}</b><small>${c[1]}</small></div>`).join('');
+
+/* palette */
+const PAL=[['Morango','#F2738C','Amor, customização, títulos'],['Folha','#6DB04B','Atender, sucesso, plantas'],['Mostarda','#F2C230','Upgrade, moedas, estrelas'],['Pôr do sol','#FFB38A','Janelas, céu, calor'],['Lilás','#B7A6E8','Noite, momentos românticos'],['Madeira','#C8875A','Piso, mesas, molduras'],['Tijolo','#E2A77E','Paredes do salão'],['Café escuro','#3B2A28','Pílulas do HUD, lousa'],['Papel','#FFF4EE','Fundo de painéis'],['Chocolate','#4A2C2A','Contorno e texto']];
+document.getElementById('swatches').innerHTML = PAL.map(([n,h,u])=>`<div class="sw"><div class="chip" style="background:${h}"></div><div class="t"><b>${n}</b><code>${h}</code><br>${u}</div></div>`).join('');
+
+/* icons */
+const IC={
+ coin:`<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#FFD66B" stroke="#C99A2E" stroke-width="3"/><circle cx="20" cy="20" r="10" fill="none" stroke="#E3B23C" stroke-width="2.5"/><path d="M20 14v12" stroke="#C99A2E" stroke-width="3" stroke-linecap="round"/></svg>`,
+ star:`<svg viewBox="0 0 40 40"><polygon points="20,4 24.7,14.6 36,15.6 27.4,23 30,34 20,28.2 10,34 12.6,23 4,15.6 15.3,14.6" fill="#FFD66B" stroke="#C99A2E" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+ heart:`<svg viewBox="0 0 40 40">${heart(20,22,1.9,STRAW,'#D24F6C',2.5)}</svg>`,
+ clock:`<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#fff" stroke="${L}" stroke-width="3"/><path d="M20 11v9l6 4" fill="none" stroke="${L}" stroke-width="3" stroke-linecap="round"/></svg>`,
+ cafe:`<svg viewBox="0 0 40 40"><path d="M14 13c0-3 3-3 3-6M21 13c0-3 3-3 3-6" fill="none" stroke="#C9A79A" stroke-width="2" stroke-linecap="round"/><path d="M8 16h20v9a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8z" fill="#fff" stroke="${L}" stroke-width="2.5"/><path d="M28 19h3a4 4 0 0 1 0 8h-3" fill="none" stroke="${L}" stroke-width="2.5"/><ellipse cx="18" cy="16.5" rx="8.5" ry="2" fill="#8A5A3C"/></svg>`,
+ bolo:`<svg viewBox="0 0 40 40"><path d="M5 31L35 31L35 20L5 14Z" fill="#FFD9E0" stroke="${L}" stroke-width="2.5" stroke-linejoin="round"/><path d="M5 22L35 25" stroke="${STRAW}" stroke-width="2.5"/><path d="M5 14L35 20L33 16L8 10Z" fill="#fff" stroke="${L}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="22" cy="11" r="4.5" fill="#E8476A" stroke="${L}" stroke-width="2"/></svg>`,
+ panqueca:`<svg viewBox="0 0 40 40"><ellipse cx="20" cy="32" rx="16" ry="4" fill="#fff" stroke="${L}" stroke-width="2.5"/><rect x="7" y="23" width="26" height="7" rx="3.5" fill="#F3B76B" stroke="${L}" stroke-width="2.2"/><rect x="8" y="17" width="24" height="7" rx="3.5" fill="#F3B76B" stroke="${L}" stroke-width="2.2"/><path d="M8 18Q20 12 32 18L31 22Q27 20 25 24Q23 20 19 23Q15 20 11 22Z" fill="#E8476A" stroke="${L}" stroke-width="2" stroke-linejoin="round"/></svg>`,
+ morango:`<svg viewBox="0 0 40 40"><path d="M20 35C9 28 8 18 12 14C15 11 25 11 28 14C32 18 31 28 20 35Z" fill="#E8476A" stroke="${L}" stroke-width="2.5"/><path d="M12 13L20 8L28 13L20 16Z" fill="${MATCHA}" stroke="${L}" stroke-width="2.2" stroke-linejoin="round"/><g fill="#FFE1A6"><circle cx="16" cy="20" r="1.2"/><circle cx="23" cy="21" r="1.2"/><circle cx="19" cy="26" r="1.2"/><circle cx="25" cy="27" r="1.2"/></g></svg>`,
+ croissant:`<svg viewBox="0 0 40 40"><path d="M5 27Q7 11 20 10Q33 11 35 27Q29 22 27 25Q23 17 20 20Q17 17 13 25Q11 22 5 27Z" fill="#F2B45C" stroke="${L}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+ chantilly:`<svg viewBox="0 0 40 40"><path d="M10 26Q9 14 20 7Q31 14 30 26Z" fill="#FFF8F0" stroke="${L}" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 20Q20 16 26 20" fill="none" stroke="${L}" stroke-width="1.8"/><path d="M9 26h22l-3 8h-16z" fill="#B7A6E8" stroke="${L}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+ calda:`<svg viewBox="0 0 40 40"><rect x="13" y="13" width="14" height="22" rx="5" fill="#E8476A" stroke="${L}" stroke-width="2.5"/><rect x="16" y="5" width="8" height="9" rx="2" fill="#fff" stroke="${L}" stroke-width="2.5"/><path d="M16 22h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+ forno:`<svg viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="27" rx="5" fill="#fff" stroke="${L}" stroke-width="2.5"/><rect x="9" y="15" width="22" height="15" rx="3" fill="#FFB38A" stroke="${L}" stroke-width="2.2"/><circle cx="12" cy="11" r="1.8" fill="${L}"/><circle cx="18" cy="11" r="1.8" fill="${L}"/></svg>`,
+ maquina:`<svg viewBox="0 0 40 40"><rect x="7" y="6" width="26" height="10" rx="4" fill="#B7A6E8" stroke="${L}" stroke-width="2.5"/><rect x="9" y="16" width="22" height="18" rx="3" fill="#fff" stroke="${L}" stroke-width="2.5"/><path d="M17 16v5h6v-5" fill="none" stroke="${L}" stroke-width="2.2"/><rect x="15" y="25" width="10" height="7" rx="2" fill="#8A5A3C" stroke="${L}" stroke-width="2"/></svg>`,
+ planta:`<svg viewBox="0 0 40 40"><path d="M20 24C10 22 6 12 8 6C16 8 20 16 20 24ZM20 24C30 22 34 12 32 6C24 8 20 16 20 24Z" fill="${MATCHA}" stroke="${L}" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 24h16l-2 11h-12z" fill="#FFB38A" stroke="${L}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+ luzes:`<svg viewBox="0 0 40 40"><path d="M3 10Q20 24 37 10" fill="none" stroke="${L}" stroke-width="2"/>${[[8,15],[15,19],[22,19.5],[29,17],[35,12]].map(([x,y])=>`<circle cx="${x}" cy="${y+3}" r="3.5" fill="${BUTTER}" stroke="${L}" stroke-width="1.6"/>`).join('')}</svg>`,
+ mesa:`<svg viewBox="0 0 40 40"><ellipse cx="20" cy="17" rx="16" ry="5" fill="#D9A274" stroke="${L}" stroke-width="2.5"/><path d="M20 22v12M13 34h14" stroke="${L}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+ quadro:`<svg viewBox="0 0 40 40"><rect x="6" y="7" width="28" height="26" rx="3" fill="#FFF6EE" stroke="#A86F45" stroke-width="3.5"/>${heart(20,21,1.1,STRAW,L,1.6)}</svg>`,
+ jukebox:`<svg viewBox="0 0 40 40"><path d="M8 34V16a12 12 0 0 1 24 0v18z" fill="#F2738C" stroke="${L}" stroke-width="2.5"/><rect x="13" y="16" width="14" height="8" rx="2" fill="#FFD66B" stroke="${L}" stroke-width="2"/><path d="M13 29h14" stroke="${L}" stroke-width="2"/></svg>`,
+ lock:`<svg viewBox="0 0 40 40"><rect x="10" y="18" width="20" height="15" rx="4" fill="#C9B6AC"/><path d="M14 18v-4a6 6 0 0 1 12 0v4" fill="none" stroke="#C9B6AC" stroke-width="3.5"/></svg>`
+};
+
+/* HUD kit */
+document.getElementById('hudKit').innerHTML =
+ `<span class="pill"><span class="ic">${IC.coin}</span>1.240</span>`+
+ `<span class="pill"><span class="ic">${IC.star}</span>2 / 3</span>`+
+ `<span class="pill"><span class="ic">${IC.heart}</span><span class="lovebar"><i></i></span><span style="font-size:.85rem">Nv 3</span></span>`+
+ `<span class="pill"><span class="ic">${IC.clock}</span>Dia 7 · 1:42</span>`;
+document.getElementById('bGold').insertAdjacentHTML('afterbegin',`<span style="display:inline-block;width:22px;height:22px;vertical-align:-4px;margin-right:6px">${IC.coin}</span>`);
+document.getElementById('bubbleKit').innerHTML =
+ `<span class="bubble">${IC.cafe}${IC.bolo}<span class="pat">♥♥♥♡</span></span>`+
+ `<span class="bubble">${IC.panqueca}<span class="pat">♥♡♡♡</span></span>`+
+ `<span class="bubble" style="border-color:#C99A2E;background:#FFF6D6">${IC.heart}<b style="font-family:var(--f-display);font-size:.9rem">Pedido<br>Especial</b><span class="pat" style="color:#C99A2E;border-color:#C99A2E">✦</span></span>`;
+document.getElementById('dialogKit').innerHTML =
+ `<div class="face">${chibi(you({expression:'apaixonada'}))}</div><div class="box"><span class="name">Cliente</span>Esse bolo de morango tem gosto de [frase do primeiro encontro]…</div>`;
+
+/* restaurant screen */
+const ch=(p,l,t,w,z)=>`<div class="abs ch" style="left:${l}%;top:${t}%;width:${w}%;z-index:${z||1}">${chibi(p)}</div>`;
+document.getElementById('scrRestaurant').innerHTML = `
+ <div class="abs wall"></div><div class="abs lights"></div>
+ <div class="abs win"></div>
+ <div class="abs frame" style="left:33%;top:13%;width:8%;height:15%"><svg viewBox="0 0 40 40" style="width:70%">${heart(20,22,1.6,STRAW,L,2)}</svg></div>
+ <div class="abs frame" style="left:44%;top:16%;width:6%;height:11%"><svg viewBox="0 0 40 40" style="width:70%">${IC.cafe.replace(/<\/?svg[^>]*>/g,'')}</svg></div>
+ <div class="abs" style="left:88%;top:24%;width:9%">${IC.planta}</div>
+ <div class="abs" style="right:3%;top:10%;width:8%;height:42%;background:#C98B5E;border:.5cqw solid #A86F45;border-radius:.8cqw .8cqw 0 0"><div style="position:absolute;right:12%;top:50%;width:1cqw;height:1cqw;border-radius:50%;background:${BUTTER}"></div></div>
+ <div class="abs wains"></div><div class="abs floor"></div>
+ ${ch(you({expression:'feliz',outfit:'#8CC59A'}),9,30,10)}
+ <div class="abs tbl" style="left:8%;top:57%;z-index:2"></div>
+ <div class="abs ob" style="left:13%;top:20%;z-index:3">${IC.cafe}${IC.croissant}<span class="hearts">♥♥♥♥</span></div>
+ ${ch(you({expression:'impaciente',pose:'cintura',outfit:'#7FA7D9'}),33,30,10)}
+ <div class="abs tbl" style="left:32%;top:57%;z-index:2"></div>
+ <div class="abs ob" style="left:38%;top:21%;z-index:3">${IC.panqueca}<span class="hearts">♥♡♡♡</span></div>
+ ${ch(you({expression:'apaixonada',outfit:'#B7A6E8'}),71,30,10)}
+ <div class="abs tbl" style="left:70%;top:57%;z-index:2"></div>
+ <div class="abs fly" style="left:70%;top:21%;z-index:3">+12 ♥ +2</div>
+ ${ch(her({pose:'bandeja'}),50,36,13,2)}
+ <div class="abs counter">
+   <div class="st busy">${IC.maquina}<em>Cafeteira</em></div>
+   <div class="st">${IC.forno}<em>Forno</em></div>
+   <div class="st">${IC.panqueca}<em>Chapa</em></div>
+   <div class="st" style="width:13cqw;aspect-ratio:auto;height:9.2cqw">${IC.bolo}<em>Bancada</em></div>
+   <div class="st">${IC.morango}<em>Morangos</em></div>
+   <div class="st">${IC.chantilly}<em>Chantilly</em></div>
+ </div>
+ <div class="abs hud">
+   <div class="grp"><span class="hp">${IC.coin}1.240</span><span class="hp">${IC.star}2/3</span><span class="hp">${IC.heart}<span class="bar"><i></i></span><small>Nv 3</small></span></div>
+   <div class="grp"><span class="hp">${IC.clock}Dia 7 · 1:42</span><span class="rbtn">II</span></div>
+ </div>`;
+
+/* order screen */
+document.getElementById('scrOrder').innerHTML = `
+ <div class="abs os-bg"></div>
+ <div class="abs" style="left:0;right:0;top:30%;height:1.2cqw;background:var(--wood-d)"></div>
+ <div class="abs ticket"><h5>Mesa 2 · Cliente</h5><ol>
+   <li class="done">Panqueca (chapa)</li><li class="done">Calda de morango</li><li class="now">Chantilly</li><li>Morango no topo</li></ol></div>
+ <div class="abs plate"><svg viewBox="0 0 200 130">
+   <ellipse cx="100" cy="108" rx="92" ry="18" fill="#fff" stroke="${L}" stroke-width="4"/>
+   <ellipse cx="100" cy="104" rx="70" ry="11" fill="#F6EFEA"/>
+   <rect x="40" y="76" width="120" height="26" rx="13" fill="#F3B76B" stroke="${L}" stroke-width="3.5"/>
+   <rect x="44" y="54" width="112" height="26" rx="13" fill="#F3B76B" stroke="${L}" stroke-width="3.5"/>
+   <rect x="48" y="32" width="104" height="26" rx="13" fill="#F3B76B" stroke="${L}" stroke-width="3.5"/>
+   <path d="M50 38Q100 18 150 38L148 50Q138 44 132 56Q126 46 116 54Q106 44 96 58Q86 46 76 54Q66 44 58 52Q52 46 50 50Z" fill="#E8476A" stroke="${L}" stroke-width="3" stroke-linejoin="round"/>
+   <g opacity=".45"><path d="M80 32Q78 8 100 0Q122 8 120 32Z" fill="#fff" stroke="${L}" stroke-width="3" stroke-dasharray="6 5"/></g>
+ </svg></div>
+ <div class="abs" style="left:58%;top:16%;font-size:1.5cqw;background:#fff;border-radius:9cqw;padding:.3cqw 1.2cqw;border:.3cqw solid var(--straw);color:var(--straw-d);font-weight:600">toque no chantilly</div>
+ <div class="abs bins">
+   <div class="bin">${IC.calda}</div><div class="bin hint">${IC.chantilly}</div><div class="bin">${IC.morango}</div>
+   <div class="bin">${IC.croissant}</div><div class="bin">${IC.cafe}</div><div class="bin">${IC.bolo}</div>
+ </div>
+ <div class="abs os-actions"><span class="sbtn sec">Descartar</span><span class="sbtn ok">Entregar</span></div>
+ <div class="abs hud"><div class="grp"><span class="hp">${IC.coin}1.240</span><span class="hp">${IC.heart}<span class="bar"><i></i></span><small>Nv 3</small></span></div><div class="grp"><span class="hp" style="color:var(--straw)">Paciência ♥♥♥♡</span><span class="rbtn">×</span></div></div>`;
+
+/* upgrades screen */
+const uc=(icon,name,desc,pips,buy,cls,extra)=>`<div class="ucard ${extra||''}"><div class="th">${icon}</div><b>${name}</b><small>${desc}</small><div class="pips">${[0,1,2].map(i=>`<i class="${i<pips?'on':''}"></i>`).join('')}</div><div class="buy ${cls||''}">${buy}</div></div>`;
+document.getElementById('scrUpgrades').innerHTML = `
+ <div class="abs up-bg"></div>
+ <div class="abs up-prev"><div class="abs wall" style="inset:0 0 35% 0"></div><div class="abs lights" style="top:4%;height:6%"></div><div class="abs floor" style="top:65%"></div>
+   <div class="abs" style="left:8%;top:22%;width:22%">${IC.quadro}</div><div class="abs" style="left:68%;top:30%;width:24%">${IC.planta}</div>
+   <div class="abs ch" style="left:32%;top:24%;width:36%">${chibi(her({expression:'surpresa',pose:'bochechas'}))}</div>
+   <div class="abs" style="left:0;right:0;bottom:4%;text-align:center;font-size:1.4cqw;font-weight:600">Prévia ao vivo</div></div>
+ <div class="abs up-side">
+   <div class="tabs"><span class="tab">Cozinha</span><span class="tab">Salão</span><span class="tab on">Decoração</span><span class="tab">Romance ♥</span></div>
+   <div class="cards">
+     ${uc(IC.planta,'Costela-de-adão','+5% paciência das clientes',1,`${IC.coin}120`)}
+     ${uc(IC.quadro,'Quadro: nosso 1º encontro','Ilustração de [momento]',0,`${IC.coin}250`,'','new')}
+     ${uc(IC.luzes,'Varal de luzinhas','Luz quente à noite',0,`${IC.heart}30`,'love')}
+     ${uc(IC.mesa,'Mesa para dois','+1 cliente ao mesmo tempo',0,`${IC.lock}Nível 4`,'locked')}
+     ${uc(IC.maquina,'Cafeteira Nv 3','Prepara 20% mais rápido',2,`${IC.coin}450`)}
+     ${uc(IC.jukebox,'Jukebox','Toca as músicas de vocês',0,`${IC.lock}Nível 5`,'locked')}
+   </div>
+ </div>
+ <div class="abs hud"><div class="grp"><span class="hp" style="font-size:2cqw;padding-left:1.4cqw">Melhorias</span></div><div class="grp"><span class="hp">${IC.coin}1.240</span><span class="hp">${IC.heart}312</span><span class="rbtn">×</span></div></div>`;
+
+/* progression screen */
+const NODES=[['Primeiro encontro','Nv 1',8,70],['Se conhecendo','Nv 2',24,30],['Apaixonadas','Nv 3',42,64],['Namoradas','Nv 4',59,26],['Nosso cantinho','Nv 5',76,62],['Para sempre','Nv 6',92,22]];
+const cur=2;
+let pathD='M'+NODES.map(n=>`${n[2]*10} ${n[3]*4}`).join(' L');
+const nodeSvg=NODES.map((n,i)=>{const x=n[2]*10,y=n[3]*4;
+  if(i<cur) return `<circle cx="${x}" cy="${y}" r="26" fill="${STRAW}" stroke="#fff" stroke-width="6"/><path d="M${x-9} ${y}l6 7 12-14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if(i===cur) return `<circle cx="${x}" cy="${y}" r="42" fill="rgba(255,255,255,.45)"/><circle cx="${x}" cy="${y}" r="32" fill="#fff" stroke="${STRAW}" stroke-width="7"/>${heart(x,y+2,2.2,STRAW)}`;
+  if(i===5) return `<circle cx="${x}" cy="${y}" r="30" fill="#FFF6D6" stroke="#E3B23C" stroke-width="5" stroke-dasharray="8 6"/><text x="${x}" y="${y+11}" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="32" fill="#E3B23C">?</text>`;
+  return `<circle cx="${x}" cy="${y}" r="24" fill="rgba(255,255,255,.6)" stroke="#fff" stroke-width="5"/><g transform="translate(${x-14} ${y-15}) scale(.7)">${IC.lock.replace(/<\/?svg[^>]*>/g,'')}</g>`;
+}).join('');
+document.getElementById('scrProgress').innerHTML = `
+ <div class="abs pg-bg"></div>
+ <div class="abs lights" style="top:2%;opacity:.8"></div>
+ <div class="abs path"><svg viewBox="0 0 1000 400" preserveAspectRatio="none"><path d="${pathD}" fill="none" stroke="#fff" stroke-width="10" stroke-dasharray="2 22" stroke-linecap="round"/>${nodeSvg}</svg>
+   ${NODES.map((n,i)=>`<div class="node-l" style="left:${n[2]}%;top:${n[3]+ (n[3]>50?14:-30)}%">${n[0]}<small>${n[1]}${i===cur?' · você está aqui':''}</small></div>`).join('')}</div>
+ <div class="abs pg-card">
+   <div style="width:8cqw">${chibi(her({expression:'apaixonada'}))}</div>
+   <div><h5>Próximo: Namoradas</h5><p>Faltam 88 de Amor. <span class="hp" style="font-size:1.2cqw;padding:.1cqw 1cqw;box-shadow:none"><span class="bar" style="width:14cqw"><i style="width:56%"></i></span>312 / 400</span></p></div>
+   <div class="un"><span>Mesa para dois</span><span>Aventais iguais</span><span>Mini-cena</span></div>
+ </div>
+ <div class="abs hud"><div class="grp"><span class="hp" style="font-size:2cqw;padding-left:1.4cqw">Nossa história</span></div><div class="grp"><span class="hp">Álbum de memórias · 2/3</span><span class="rbtn">×</span></div></div>`;
+
+/* customizer */
+const CZ={
+ 'Cabelo':{key:'hairStyle',opts:[['longo','Liso longo'],['ondulado','Ondulado'],['cacheado','Cacheado'],['coque','Coque alto'],['rabo','Rabo'],['chanel','Chanel']],kind:'char'},
+ 'Penteado':{key:'bangs',opts:[['sem','Repartido'],['cortina','Cortina'],['franja','Franja'],['lateral','De lado']],kind:'char'},
+ 'Cor do cabelo':{key:'hairColor',opts:[['#2B1D19','Preto'],['#5A3A2A','Castanho'],['#9A5A34','Cobre'],['#E8B04A','Loiro'],['#C0392B','Vermelho'],['#F4A7C0','Rosa']],kind:'color'},
+ 'Olhos':{key:'eyeShape',opts:[['cilios','Com cílios'],['redondo','Redondos'],['amendoado','Amendoados']],kind:'char',second:{key:'eyeColor',opts:[['#6B4126','Castanho'],['#3B2418','Escuro'],['#3F6B3A','Verde'],['#2F7F86','Petróleo'],['#3F78C8','Azul']]}},
+ 'Sobrancelhas':{key:'brows',opts:[['finas','Finas'],['grossas','Grossas']],kind:'char'},
+ 'Pele':{key:'skin',opts:[['#FBDCC4','1'],['#EDB892','2'],['#E2A982','3'],['#C98B62','4'],['#9C6544','5'],['#6E432E','6']],kind:'color'},
+ 'Óculos':{key:'glasses',opts:[['nenhum','Sem'],['redondos','Redondos'],['quadrados','Quadrados'],['gatinho','Gatinho']],kind:'char'},
+ 'Roupas':{key:'pattern',opts:[['camuflada','Camuflada'],['','Lisa'],['listrada','Listrada']],kind:'char',second:{key:'outfit',opts:[['#7D8456','Oliva'],['#2E2828','Preta'],['#F4F1EC','Branca'],['#F4A7C0','Rosa'],['#7B5BB8','Roxa'],['#E9E9EE','Cinza']]}},
+ 'Avental':{key:'apron',opts:[['#2E2626','Preto'],['#7A4A2E','Marrom'],['#6E7A4A','Oliva'],['#F2738C','Rosa'],['#FFD3DC','Rosinha'],['nenhum','Sem']],kind:'color'},
+ 'Acessórios':{key:'accessory',opts:[['brincos','Argolas'],['laco','Laço'],['presilha','Presilha'],['flor','Flor'],['tiara','Tiara'],['nenhum','Nada']],kind:'char'},
+ 'Sapatos':{key:'shoes',opts:[['#2E2828','Preto'],['#FFFFFF','Branco'],['#F2738C','Rosa'],['#A86F45','Caramelo']],kind:'color'},
+ 'Expressões':{key:'expression',opts:[['neutro','Normal'],['feliz','Feliz'],['joinha','Piscando'],['surpresa','Surpresa'],['comemorando','Animada'],['brava','Brava'],['triste','Triste'],['sonolenta','Cansada'],['apaixonada','Encantada']],kind:'char'}
+};
+let cz=Object.assign({},HER), czTab='Cabelo';
+const czChar=document.getElementById('czChar'), czTabs=document.getElementById('czTabs'), czOpts=document.getElementById('czOpts'), czLabel=document.getElementById('czLabel');
+document.getElementById('czLove').innerHTML=IC.heart;
+function thumb(key,val){
+  const p=Object.assign({},cz,{[key]:val,pose:'parada'});
+  const body=['pattern','outfitType','apron','shoes'].includes(key);
+  return `<svg viewBox="${body?'10 0 180 270':'40 8 120 120'}" aria-hidden="true">${chibiInner(p)}</svg>`;
+}
+function optButtons(def){
+  return def.opts.map(([v,label])=>{
+    const on=cz[def.key]===v;
+    const isColor=/^#/.test(v)||def.kind==='color';
+    const vis = isColor && /^#/.test(v) ? `<span class="dot" style="background:${v}"></span>` : thumb(def.key,v);
+    return `<button type="button" data-k="${def.key}" data-v="${v}" aria-pressed="${on}">${vis}${label}</button>`;
+  }).join('');
+}
+function renderCz(){
+  czChar.innerHTML=chibi(cz);
+  czTabs.innerHTML=Object.keys(CZ).map(t=>`<button type="button" role="tab" aria-selected="${t===czTab}" data-t="${t}">${t}</button>`).join('');
+  const def=CZ[czTab];
+  czLabel.textContent=czTab;
+  czOpts.innerHTML=optButtons(def)+(def.second?`<div style="grid-column:1/-1;font-family:var(--f-display);font-weight:600;margin-top:4px">Cor</div>`+optButtons(def.second):'');
+}
+czTabs.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;czTab=b.dataset.t;renderCz();});
+czOpts.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cz[b.dataset.k]=b.dataset.v;renderCz();});
+document.getElementById('czRandom').addEventListener('click',()=>{
+  Object.values(CZ).forEach(d=>{[d,d.second].filter(Boolean).forEach(x=>{const o=x.opts[Math.floor(Math.random()*x.opts.length)];cz[x.key]=o[0];});});
+  renderCz();
+});
+renderCz();
+
+/* storyboard */
+const night='background:linear-gradient(#5E4E8C,#B7A6E8 70%,#F7C1CF)';
+const warm='background:linear-gradient(#FFD9C0,#FFE6D8)';
+const SHOTS=[
+ ['Cena 1','Fim do expediente','O restaurante esvazia e as luzes baixam. A porta toca o sino e a última cliente entra, toda arrumada.',warm,chibi(you({expression:'apaixonada',outfit:'#F2738C',outfitType:'vestido',apron:'nenhum'}),'c')],
+ ['Cena 2','O Pedido Especial','Aparece um balão dourado com "O nosso primeiro encontro: [o que vocês pediram]". A música muda para a de vocês.',warm,chibi(her({expression:'surpresa',pose:'bochechas'}),'c')+`<div class="bubble abs" style="top:10%;right:8%;border-color:#C99A2E;background:#FFF6D6;padding:6px 10px">${IC.heart.replace('viewBox','style="width:30px;height:30px" viewBox')}<b style="font-family:var(--f-display);font-size:.8rem">Especial</b></div>`],
+ ['Cena 3','Preparo com carinho','Montagem guiada e sem tempo: cada passo traz uma linha de memória. No fim, ela escreve [frase] com calda no prato.',warm,chibi(her({pose:'bandeja',expression:'feliz'}),'c')],
+ ['Cena 4','A surpresa','A cliente se levanta e as duas ficam frente a frente. Em letterbox, um coração gigante se abre: [a surpresa que você escolher].',night,chibi(her({expression:'apaixonada',apron:'nenhum'}),'c')+chibi(you({expression:'coracao',pose:'coracao',outfit:'#F2738C',outfitType:'vestido'}),'c')],
+ ['Cena 5','Para sempre','A placa do restaurante muda para "[Nome] & [Nome]". A carta final abre na tela e chega o Nível 6, com o modo livre.',night,chibi(her({expression:'comemorando',pose:'comemorando',apron:'nenhum'}),'c')+chibi(you({expression:'comemorando',pose:'comemorando',outfit:'#B7A6E8'}),'c')]
+];
+document.getElementById('story').innerHTML=SHOTS.map(s=>`<div class="shot"><div class="pic" style="${s[3]}">${s[4]}</div><div class="t"><span class="k">${s[0]}</span><b>${s[1]}</b><span class="muted">${s[2]}</span></div></div>`).join('');
+
+/* animations */
+const AN=[
+ ['Personagens','Idle (respirar)','Corpo estica 2% na vertical, em loop','2 s'],
+ ['Personagens','Piscar','Olhos trocam para uma linha a cada 3 a 5 s, em tempo aleatório','120 ms'],
+ ['Personagens','Andar','Pulinho e leve inclinação, sem animar as pernas','0,4 s/passo'],
+ ['Personagens','Carregar bandeja','Troca de pose e a bandeja balança','—'],
+ ['Personagens','Trocar expressão','"Pop" de escala 1 → 1,08 → 1 na cabeça','150 ms'],
+ ['Personagens','Comemorar','Pulo, braços para cima e confete','0,8 s'],
+ ['Clientes','Entrar','Sino da porta, porta abre e ela anda até a mesa','1,2 s'],
+ ['Clientes','Balão de pedido','Escala de 0 a 1,1 e depois 1, com efeito elástico','0,35 s'],
+ ['Clientes','Paciência','Corações esvaziam um a um; no último, a pose muda para impaciente','contínuo'],
+ ['Clientes','Reação','Troca de expressão e partículas de coração ou estrela','0,8 s'],
+ ['Clientes','Sair','Aceno, caminhada e porta','1 s'],
+ ['Interface','Botão','Desce 4 px e a sombra some','80 ms'],
+ ['Interface','Moedas voando','Moedas em arco até o HUD, com o contador rolando','0,6 s'],
+ ['Interface','Barra de Amor','Enche com brilho correndo; ao subir de nível, vem o banner','1 s'],
+ ['Interface','Desbloqueio','Cartão vira e o item novo cai no restaurante com "plim"','0,7 s'],
+ ['Cenário','Vapor, luzinhas, plantas','Loops leves e defasados entre si','2 a 4 s'],
+ ['Cenário','Céu da janela','Gradiente vai de manhã a pôr do sol ao longo do dia de trabalho','duração do dia'],
+ ['Cena especial','Letterbox e vinheta','Barras pretas entram, a luz esquenta e o texto vai sendo digitado','1,5 s'],
+ ['Cena especial','Coração gigante','Escala com mola e chuva de pétalas','2 s']
+];
+document.getElementById('animRows').innerHTML=AN.map(a=>`<tr><td class="lv">${a[0]}</td><td><b>${a[1]}</b></td><td>${a[2]}</td><td class="n">${a[3]}</td></tr>`).join('');
+</script>

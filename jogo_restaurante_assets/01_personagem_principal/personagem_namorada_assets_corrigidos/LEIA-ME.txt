@@ -1,0 +1,14 @@
+ASSETS CORRIGIDOS – PERSONAGEM
+
+Os desenhos foram recortados diretamente da folha original usando limites de cada célula, sem atravessar a célula vizinha.
+O fundo branco conectado às bordas foi removido para gerar PNGs transparentes, preservando detalhes brancos internos dos personagens.
+
+Estrutura:
+- 01_visuais_roupas: 8 roupas/visuais
+- 02_expressoes_rosto: 11 expressões faciais
+- 03_expressoes_extras: 11 estados/expressões extras
+- 04_acoes: 11 ações/gestos
+- 05_combinacoes: presets baseados nos 8 visuais
+- 00_referencia: folha original
+
+Observação: a folha atual contém 11 expressões faciais + 11 extras + 11 ações (33 desenhos entre expressões/estados/ações).
